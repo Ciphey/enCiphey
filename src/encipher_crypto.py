@@ -1,5 +1,8 @@
 import base64
-class encipher_crypto():
+import binascii
+
+
+class encipher_crypto:
 
     """Holds the encryption functions
     can randomly select an encryption function to use on text
@@ -21,40 +24,94 @@ class encipher_crypto():
 
             returns:
                 text -> as base 64"""
-        return base64.b64encode(bytes(text, 'utf-8'))
-     def caesar_cipher(s, k):
+        return base64.b64encode(bytes(text, "utf-8"))
+
+    def caesar_cipher(self, s, k):
         """Iterates through each letter and constructs the cipher text"""
         new_message = ""
         factor = k % 26
         for c in s:
-            new_message += apply_rotation(c, factor)
+            new_message += self.apply_rotation(c, factor)
         return new_message
 
-       def sha1hash(s):
-            temp = str.encode(s)
-            temp = hashlib.sha1(temp)
-            return temp.hexdigest()
+    def apply_rotation(self, c, factor):
+        """Applies a shift of factor to the letter denoted by c"""
+        if c.isalpha():
+            lower = ord("A") if c.isupper() else ord("a")
+            c = chr(lower + ((ord(c) - lower + factor) % 26))
+        return c
 
-        def md5hash(s):
-            temp = str.encode(s)
-            temp = hashlib.md5(temp)
-            return temp.hexdigest()
+    def toBase32(self, text: str) -> str:
+        """Turns text into base64 using Python libray
 
-        def sha256hash(s):
-            temp = str.encode(s)
-            temp = hashlib.sha256(temp)
-            return temp.hexdigest()
+            args:
+                text -> text to convert
 
-        def sha512hash(s):
-            temp = str.encode(s)
-            temp = hashlib.sha512(temp)
-            return temp.hexdigest()
+            returns:
+                text -> as base 64"""
+        return base64.b32encode(bytes(text, "utf-8"))
 
-        def apply_rotation(c, factor):
-            """Applies a shift of factor to the letter denoted by c"""
-            if c.isalpha():
-                lower = ord("A") if c.isupper() else ord("a")
-                c = chr(lower + ((ord(c) - lower + factor) % 26))
-            return c
+    def toBase16(self, text: str) -> str:
+        """Turns text into base64 using Python libray
 
+            args:
+                text -> text to convert
 
+            returns:
+                text -> as base 64"""
+        return base64.b16encode(bytes(text, "utf-8"))
+
+    def toBinary(self, text: str) -> str:
+        return " ".join(format(ord(x), "b") for x in text)
+
+    def toAscii(self, text: str) -> str:
+        res = [ord(c) for c in s]
+        return " ".join([str(x) for x in res])
+
+    def toHex(self, text: str) -> str:
+        return binascii.hexlify(text.encode()).decode("utf-8")
+
+    def toMorseCode(self, text: str) -> str:
+        MORSE_CODE_DICT = {
+            "A": ".-",
+            "B": "-...",
+            "C": "-.-.",
+            "D": "-..",
+            "E": ".",
+            "F": "..-.",
+            "G": "--.",
+            "H": "....",
+            "I": "..",
+            "J": ".---",
+            "K": "-.-",
+            "L": ".-..",
+            "M": "--",
+            "N": "-.",
+            "O": "---",
+            "P": ".--.",
+            "Q": "--.-",
+            "R": ".-.",
+            "S": "...",
+            "T": "-",
+            "U": "..-",
+            "V": "...-",
+            "W": ".--",
+            "X": "-..-",
+            "Y": "-.--",
+            "Z": "--..",
+            "?": "..--..",
+            ".": ".-.-.-",
+            " ": "/",
+            "0": "-----",
+            "1": ".----",
+            "2": "..---",
+            "3": "...--",
+            "4": "....-",
+            "5": ".....",
+            "6": "-....",
+            "7": "--...",
+            "8": "---..",
+            "9": "----.",
+            " ": "\n",
+        }
+        return " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
