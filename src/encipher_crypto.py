@@ -1,3 +1,4 @@
+import random
 import base64
 import binascii
 
@@ -15,8 +16,26 @@ class encipher_crypto:
 
     def __init__(self):
         """TODO: to be defined. """
+        self.methods = [
+            self.toBase64,
+            self.toAscii,
+            self.toBase16,
+            self.toBase32,
+            self.toBinary,
+            self.toHex,
+            self.toMorseCode,
+            self.toReverse,
+        ]
 
-    def toBase64(self, text: str) -> str:
+    def randomEncrypt(self, text: str) -> str:
+        """Randomly encrypts string with an encryption"""
+        func_to_use = random.choice(self.methods)
+        encryptedText = func_to_use(text)
+        name = func_to_use.__name__
+
+        return {"PlainText": text, "EncryptedText": encryptedText, "CipherUsed": name}
+
+    def Base64(self, text: str) -> str:
         """Turns text into base64 using Python libray
 
             args:
@@ -26,7 +45,7 @@ class encipher_crypto:
                 text -> as base 64"""
         return base64.b64encode(bytes(text, "utf-8"))
 
-    def caesar_cipher(self, s, k):
+    def Caesar(self, s, k):
         """Iterates through each letter and constructs the cipher text"""
         new_message = ""
         factor = k % 26
@@ -41,7 +60,7 @@ class encipher_crypto:
             c = chr(lower + ((ord(c) - lower + factor) % 26))
         return c
 
-    def toBase32(self, text: str) -> str:
+    def Base32(self, text: str) -> str:
         """Turns text into base64 using Python libray
 
             args:
@@ -51,7 +70,7 @@ class encipher_crypto:
                 text -> as base 64"""
         return base64.b32encode(bytes(text, "utf-8"))
 
-    def toBase16(self, text: str) -> str:
+    def Base16(self, text: str) -> str:
         """Turns text into base64 using Python libray
 
             args:
@@ -61,17 +80,17 @@ class encipher_crypto:
                 text -> as base 64"""
         return base64.b16encode(bytes(text, "utf-8"))
 
-    def toBinary(self, text: str) -> str:
+    def Binary(self, text: str) -> str:
         return " ".join(format(ord(x), "b") for x in text)
 
-    def toAscii(self, text: str) -> str:
+    def Ascii(self, text: str) -> str:
         res = [ord(c) for c in s]
         return " ".join([str(x) for x in res])
 
-    def toHex(self, text: str) -> str:
+    def Hex(self, text: str) -> str:
         return binascii.hexlify(text.encode()).decode("utf-8")
 
-    def toMorseCode(self, text: str) -> str:
+    def MorseCode(self, text: str) -> str:
         MORSE_CODE_DICT = {
             "A": ".-",
             "B": "-...",
@@ -115,3 +134,6 @@ class encipher_crypto:
             " ": "\n",
         }
         return " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
+
+    def Reverse(self, text: str) -> str:
+        return text[::-1]
