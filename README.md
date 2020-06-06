@@ -1,3 +1,4 @@
+![PyPI](https://img.shields.io/pypi/v/enciphey)
 # enCiphey
 Literally does the opposite of Ciphey. Encrypts text with a random (crackable) encryption, hash or encoding.
 
