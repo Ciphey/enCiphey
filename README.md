@@ -1,4 +1,4 @@
-# enCipher
+# enCiphey
 Literally does the opposite of Ciphey. Encrypts text with a random (crackable) encryption, hash or encoding.
 
 Currently used to build datasets of encrypted text, but can be used in CTFs which require random components. 
@@ -8,6 +8,11 @@ Currently used to build datasets of encrypted text, but can be used in CTFs whic
 >>> import encipher_crypto
 >>> obj = encipher_crypto.encipher_crypto
 >>> print(obj.randomEncrypt("Text you want to encrypt here")
+```
+
+The output returns a dictionary containing 3 keys:
+```python
+{"PlainText": text, "EncryptedText": encryptedText, "CipherUsed": name}
 ```
 
 # Currently supported encryption methods
