@@ -35,4 +35,5 @@ self.methods = [
     self.Hex,
     self.MorseCode,
     self.Reverse,
-]```
+]
+```
