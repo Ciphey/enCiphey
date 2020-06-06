@@ -16,16 +16,17 @@ class encipher_crypto:
 
     def __init__(self):
         """DO:  be defined. """
-        self.methods = [
-            self.Base64,
-            self.Ascii,
-            self.Base16,
-            self.Base32,
-            self.Binary,
-            self.Hex,
-            self.MorseCode,
-            self.Reverse,
-        ]
+        # self.methods = [
+        #     self.Base64,
+        #     self.Ascii,
+        #     self.Base16,
+        #     self.Base32,
+        #     self.Binary,
+        #     self.Hex,
+        #     self.MorseCode,
+        #     self.Reverse,
+        # ]
+        self.methods = [self.MorseCode]
 
     def randomEncrypt(self, text: str) -> str:
         """Randomly encrypts string with an encryption"""
@@ -91,6 +92,7 @@ class encipher_crypto:
         return binascii.hexlify(text.encode()).decode("utf-8")
 
     def MorseCode(self, text: str) -> str:
+        print(f"In morse code and the text is {text}")
         MORSE_CODE_DICT = {
             "A": ".-",
             "B": "-...",
@@ -134,7 +136,17 @@ class encipher_crypto:
             " ": "\n",
         }
         print(f"*********************8 {text}")
-        return " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
+        morse = []
+        for i in text:
+            print(f"Getting {i}")
+            m = MORSE_CODE_DICT.get(i.upper())
+            print(f"m is {m}")
+            morse.append(m)
+
+        print(f"Morse code completed, return is {morse}")
+        output = " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
+
+        return output
 
     def Reverse(self, text: str) -> str:
         return text[::-1]
