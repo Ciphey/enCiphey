@@ -1,2 +1,2 @@
 # enCipher
-Literally does the opposite of Ciphey. Encrypts text.
+Literally does the opposite of Ciphey. Encrypts text with a random (crackable) encryption.
