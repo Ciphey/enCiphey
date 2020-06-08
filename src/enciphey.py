@@ -3,6 +3,7 @@ import encipher_crypto
 import nltk
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 
+
 class encipher:
 
     """Generates encrypted text. Used for the NN and test_generator"""
@@ -16,18 +17,18 @@ class encipher:
         self.crypto = encipher_crypto.encipher_crypto()
 
     def read_text(self):
-        f = open("dickens.txt")
+        f = open("hansard.txt", encoding="ISO-8859-1")
         print("Opened dickens")
-        x = f.read()
-        x = x[200:400]
+        x = f.read()[0:200]
         print("Split file")
-        print(x)
         splits = nltk.tokenize.sent_tokenize(x)
         print(f"Splits is {splits}")
         return splits
 
     def getRandomSentence(self):
-        return TreebankWordDetokenizer().detokenize(random.sample(self.text, random.randint(1, self.MAX_SENTENCE_LENGTH)))
+        return TreebankWordDetokenizer().detokenize(
+            random.sample(self.text, random.randint(1, self.MAX_SENTENCE_LENGTH))
+        )
 
     def getRandomEncryptedSentence(self):
         print("Getting random sentence")

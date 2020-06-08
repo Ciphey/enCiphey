@@ -1,6 +1,7 @@
 import random
 import base64
 import binascii
+import cipheydists
 
 
 class encipher_crypto:
@@ -16,17 +17,18 @@ class encipher_crypto:
 
     def __init__(self):
         """DO:  be defined. """
-        # self.methods = [
-        #     self.Base64,
-        #     self.Ascii,
-        #     self.Base16,
-        #     self.Base32,
-        #     self.Binary,
-        #     self.Hex,
-        #     self.MorseCode,
-        #     self.Reverse,
-        # ]
-        self.methods = [self.MorseCode]
+        self.methods = [
+            self.Base64,
+            self.Ascii,
+            self.Base16,
+            self.Base32,
+            self.Binary,
+            self.Hex,
+            self.MorseCode,
+            self.Reverse,
+            self.Vigenere
+        ]
+        self.morse_dict = dict(cipheydists.get_charset("morse"))
 
     def randomEncrypt(self, text: str) -> str:
         """Randomly encrypts string with an encryption"""
@@ -92,61 +94,27 @@ class encipher_crypto:
         return binascii.hexlify(text.encode()).decode("utf-8")
 
     def MorseCode(self, text: str) -> str:
-        print(f"In morse code and the text is {text}")
-        MORSE_CODE_DICT = {
-            "A": ".-",
-            "B": "-...",
-            "C": "-.-.",
-            "D": "-..",
-            "E": ".",
-            "F": "..-.",
-            "G": "--.",
-            "H": "....",
-            "I": "..",
-            "J": ".---",
-            "K": "-.-",
-            "L": ".-..",
-            "M": "--",
-            "N": "-.",
-            "O": "---",
-            "P": ".--.",
-            "Q": "--.-",
-            "R": ".-.",
-            "S": "...",
-            "T": "-",
-            "U": "..-",
-            "V": "...-",
-            "W": ".--",
-            "X": "-..-",
-            "Y": "-.--",
-            "Z": "--..",
-            "?": "..--..",
-            ".": ".-.-.-",
-            " ": "/",
-            "0": "-----",
-            "1": ".----",
-            "2": "..---",
-            "3": "...--",
-            "4": "....-",
-            "5": ".....",
-            "6": "-....",
-            "7": "--...",
-            "8": "---..",
-            "9": "----.",
-            " ": "\n",
-        }
-        print(f"*********************8 {text}")
         morse = []
         for i in text:
-            print(f"Getting {i}")
-            m = MORSE_CODE_DICT.get(i.upper())
-            print(f"m is {m}")
+            m = morse_dict.get(i.upper())
+            if m == None:
+                m = ""
             morse.append(m)
 
-        print(f"Morse code completed, return is {morse}")
-        output = " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
+        output = morse
+        # output = " ".join(MORSE_CODE_DICT.get(i.upper()) for i in text)
 
-        return output
+        return " ".join(output)
 
     def Reverse(self, text: str) -> str:
         return text[::-1]
+
+    def Vigenere(self, plaintext, key):
+        key_length = len(key)
+        key_as_int = [ord(i) for i in key]
+        plaintext_int = [ord(i) for i in plaintext]
+        ciphertext = ""
+        for i in range(len(plaintext_int)):
+            value = (plaintext_int[i] + key_as_int[i % key_length]) % 26
+            ciphertext += chr(value + 65)
+        return ciphertext
