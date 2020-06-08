@@ -2,6 +2,7 @@ import random
 import base64
 import binascii
 import cipheydists
+import string
 
 
 class encipher_crypto:
@@ -26,9 +27,16 @@ class encipher_crypto:
             self.Hex,
             self.MorseCode,
             self.Reverse,
-            self.Vigenere
+            self.Vigenere,
         ]
         self.morse_dict = dict(cipheydists.get_charset("morse"))
+        self.letters = string.ascii_lowercase
+
+    def random_key(self) -> str:
+        return self.random_string(8)
+
+    def random_string(self, length) -> str:
+        return "".join(random.sample(self.letters, length))
 
     def randomEncrypt(self, text: str) -> str:
         """Randomly encrypts string with an encryption"""
@@ -96,7 +104,7 @@ class encipher_crypto:
     def MorseCode(self, text: str) -> str:
         morse = []
         for i in text:
-            m = morse_dict.get(i.upper())
+            m = self.morse_dict.get(i.upper())
             if m == None:
                 m = ""
             morse.append(m)
@@ -109,7 +117,9 @@ class encipher_crypto:
     def Reverse(self, text: str) -> str:
         return text[::-1]
 
-    def Vigenere(self, plaintext, key):
+    def Vigenere(self, plaintext):
+        key = self.random_key()
+        print(f"KEY IS {key}")
         key_length = len(key)
         key_as_int = [ord(i) for i in key]
         plaintext_int = [ord(i) for i in plaintext]
