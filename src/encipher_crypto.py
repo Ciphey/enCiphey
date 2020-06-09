@@ -3,6 +3,8 @@ import base64
 import binascii
 import cipheydists
 import string
+import cipheycore
+import cipheydists
 
 
 class encipher_crypto:
@@ -18,22 +20,28 @@ class encipher_crypto:
 
     def __init__(self):
         """DO:  be defined. """
-        self.methods = [
-            self.Base64,
-            self.Ascii,
-            self.Base16,
-            self.Base32,
-            self.Binary,
-            self.Hex,
-            self.MorseCode,
-            self.Reverse,
-            self.Vigenere,
-        ]
+        # self.methods = [
+        #     self.Base64,
+        #     self.Ascii,
+        #     self.Base16,
+        #     self.Base32,
+        #     self.Binary,
+        #     self.Hex,
+        #     self.MorseCode,
+        #     self.Reverse,
+        #     self.Vigenere,
+        # ]
+        self.methods = [self.Vigenere]
         self.morse_dict = dict(cipheydists.get_charset("morse"))
         self.letters = string.ascii_lowercase
+        self.group = cipheydists.get_charset("english")["lcase"]
 
-    def random_key(self) -> str:
-        return self.random_string(8)
+    def random_key(self, text) -> str:
+        if len(text) < 8:
+            length = 3
+        else:
+            length = 8
+        return self.random_string(length)
 
     def random_string(self, length) -> str:
         return "".join(random.sample(self.letters, length))
@@ -118,13 +126,16 @@ class encipher_crypto:
         return text[::-1]
 
     def Vigenere(self, plaintext):
-        key = self.random_key()
-        print(f"KEY IS {key}")
-        key_length = len(key)
-        key_as_int = [ord(i) for i in key]
-        plaintext_int = [ord(i) for i in plaintext]
-        ciphertext = ""
-        for i in range(len(plaintext_int)):
-            value = (plaintext_int[i] + key_as_int[i % key_length]) % 26
-            ciphertext += chr(value + 65)
-        return ciphertext
+        key = self.vig_key(plaintext, self.random_key(plaintext))
+        cipheycore.vigenere_encrypt(plaintext, key, self.group)
+
+    def vig_key(self, msg, key):
+        tab = dict()
+        for counter, i in enumerate(self.group):
+            tab[self.group[counter]] = counter
+
+        real_key = []
+        for i in key:
+            real_key.append(tab[i])
+        return real_key
+        # vigenere_encrypt(msg, real_key, group)

@@ -11,18 +11,14 @@ class encipher:
     def __init__(self):
         """Inits the encipher object """
         self.text = self.read_text()
-        print(f"Self.text is {self.text}")
-        self.MAX_SENTENCE_LENGTH = 1
+        self.MAX_SENTENCE_LENGTH = 20
         # ntlk.download("punkt")
         self.crypto = encipher_crypto.encipher_crypto()
 
     def read_text(self):
         f = open("hansard.txt", encoding="ISO-8859-1")
-        print("Opened dickens")
-        x = f.read()[0:200]
-        print("Split file")
+        x = f.read()
         splits = nltk.tokenize.sent_tokenize(x)
-        print(f"Splits is {splits}")
         return splits
 
     def getRandomSentence(self):
@@ -31,12 +27,11 @@ class encipher:
         )
 
     def getRandomEncryptedSentence(self):
-        print("Getting random sentence")
         sents = self.getRandomSentence()
 
         sentsEncrypted = self.crypto.randomEncrypt(sents)
         return {"PlainText Sentences": sents, "Encrypted Texts": sentsEncrypted}
 
 
-obj = encipher()
-print(obj.getRandomEncryptedSentence())
+# obj = encipher()
+# print(obj.getRandomEncryptedSentence())
